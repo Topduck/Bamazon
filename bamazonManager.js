@@ -14,7 +14,10 @@ var connection = mysql.createConnection({
   password: "password",
   database: "bamazon_DB"
 });
-start()
+connection.connect(function(err) {
+    if (err) throw err;
+    start();
+  });
 
 function start(){
     /*have user select from list.  Then use a 
@@ -35,18 +38,23 @@ function start(){
         switch(task) {
             case `View Products for Sale`:
                 viewProducts();
+                break;
             case `View Low Inventory`:
                 lowInventory();
+                break;
             case `Add to Inventory`:
                 addInventory();
+                break;
             case `Add New Product`:
                 addNewProduct();
+                break;
             case `Exit`:
                 console.log(`Have a nice day`)
                 break;
             default:
                 console.log("Not even sure how this is possible...");
-                start()
+                //start()
+                break;
         }
     });
 }
@@ -54,30 +62,30 @@ function viewProducts(){
     connection.query("SELECT * FROM products", function(err, results) {
         if (err) throw err;
         console.log(`Items currently in inventory`)
-        for (i in results){
+        for (var i = 0; i < results.length; i++){
             console.log(`Item ID: ${results[i].item_id}
             product_name: ${results[i].product_name}
             department_name: ${results[i].department_name}
             price: $${results[i].price}
             stock_quantity: ${results[i].stock_quantity}\n`)
         };
+        start();
     });
-    start()
 };
 function lowInventory(){
     connection.query("SELECT * FROM products WHERE stock_quantity <= 5", function(err, results) {
         if (err) throw err;
         console.log(`Items with low inventory`)
-        for (i in results){
+        for (var i = 0; i < results.length; i++){
             console.log(`Item ID: ${results[i].item_id}
             product_name: ${results[i].product_name}
             department_name: ${results[i].department_name}
             price: $${results[i].price}
             stock_quantity: ${results[i].stock_quantity}\n`)
         };
+        start();
     });
-    start()
-}
+};
 function addInventory(){
     connection.query("SELECT * FROM products", function(err, results) {
         if (err) throw err;
@@ -89,7 +97,6 @@ function addInventory(){
                 type: "rawlist",
                 choices: function() {
                   var choiceArray = [];
-                  //results.forEach(function(i){
                   for (var i = 0; i < results.length; i++) {
                   choiceArray.push(results[i].product_name);
                   };
@@ -97,14 +104,14 @@ function addInventory(){
                 },
                 message: "Which item would you like to restock?"
             },
-      {
-        name: "amount",
-        type: "input",
-        message: "How many would you like to add to the inventory?"
-      }
+            {
+                name: "amount",
+                type: "input",
+                message: "How many would you like to add to the inventory?"
+            }
         ]).then(function(restock){
             var chosenRestock;
-            for (i in results){
+            for (var i = 0; i < results.length; i++){
                 if (results[i].product_name === restock.select) {
                     chosenRestock = results[i];
                 }
@@ -122,12 +129,11 @@ function addInventory(){
                 function(error) {
                 if (error) throw err;
                 console.log("Restock successfully!");
-                start();
                 }
             );
+            start();
         })
     });
-    start()  
 }
 function addNewProduct(){
     console.log(`Adding a new item.`);
@@ -145,7 +151,7 @@ function addNewProduct(){
         {
             name: "price",
             type: "input",
-            message: "New product department?"
+            message: "New product price?"
         },
         {
             name: "stock_quantity",

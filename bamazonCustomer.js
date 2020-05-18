@@ -85,8 +85,8 @@ function start(){
             // Not enough product to fill order. apologize and start over
             console.log(`Sorry! we only have ${chosenProduct.stock_quantity} of ${chosenProduct.product_name}.
             Please select again`);
-            start();
           }
+          start();
         });
           //get info from server, then check if there is enough of that item
           //to complete order. if not tell user, and head back to start
