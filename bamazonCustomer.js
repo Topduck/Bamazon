@@ -14,7 +14,10 @@ var connection = mysql.createConnection({
   password: "password",
   database: "bamazon_DB"
 });
-start()
+connection.connect(function(err) {
+  if (err) throw err;
+  start();
+});
 
 function start(){
     connection.query("SELECT * FROM products", function(err, results) {
@@ -54,6 +57,7 @@ function start(){
       .then(function(selection){
         var chosenProduct;
         for (var i = 0; i < results.length; i++) {
+          // for(i in results) would this work?
         //results.forEach(function(i){  How can I use a better for loop?
         //I know it has to do with callback's and promises.
             if (results[i].product_name === selection.select) {
