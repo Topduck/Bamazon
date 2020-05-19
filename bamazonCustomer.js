@@ -41,7 +41,7 @@ function start(){
                   choices: function() {
                     var choiceArray = [];
                     //results.forEach(function(i){
-                    for (var i = 0; i < results.length; i++) {
+                    for (i in results) {
                     choiceArray.push(results[i].product_name);
                     };
                     return choiceArray;
@@ -56,7 +56,7 @@ function start(){
       ])
       .then(function(selection){
         var chosenProduct;
-        for (var i = 0; i < results.length; i++) {
+        for (i in results) {
           // for(i in results) would this work?
         //results.forEach(function(i){  How can I use a better for loop?
         //I know it has to do with callback's and promises.
@@ -89,8 +89,9 @@ function start(){
             // Not enough product to fill order. apologize and start over
             console.log(`Sorry! we only have ${chosenProduct.stock_quantity} of ${chosenProduct.product_name}.
             Please select again`);
+            start();
           }
-          start();
+         
         });
           //get info from server, then check if there is enough of that item
           //to complete order. if not tell user, and head back to start

@@ -62,7 +62,7 @@ function viewProducts(){
     connection.query("SELECT * FROM products", function(err, results) {
         if (err) throw err;
         console.log(`Items currently in inventory`)
-        for (var i = 0; i < results.length; i++){
+        for (i in results){
             console.log(`Item ID: ${results[i].item_id}
             product_name: ${results[i].product_name}
             department_name: ${results[i].department_name}
@@ -76,7 +76,7 @@ function lowInventory(){
     connection.query("SELECT * FROM products WHERE stock_quantity <= 5", function(err, results) {
         if (err) throw err;
         console.log(`Items with low inventory`)
-        for (var i = 0; i < results.length; i++){
+        for (i in results){
             console.log(`Item ID: ${results[i].item_id}
             product_name: ${results[i].product_name}
             department_name: ${results[i].department_name}
@@ -97,7 +97,7 @@ function addInventory(){
                 type: "rawlist",
                 choices: function() {
                   var choiceArray = [];
-                  for (var i = 0; i < results.length; i++) {
+                  for (i in results) {
                   choiceArray.push(results[i].product_name);
                   };
                   return choiceArray;
@@ -111,7 +111,7 @@ function addInventory(){
             }
         ]).then(function(restock){
             var chosenRestock;
-            for (var i = 0; i < results.length; i++){
+            for (i in results){
                 if (results[i].product_name === restock.select) {
                     chosenRestock = results[i];
                 }
